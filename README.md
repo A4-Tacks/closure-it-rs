@@ -1,4 +1,4 @@
-Like kotlin it keyword, translate `it` in group to closure
+Like kotlin it keyword, translate `it` to closure
 
 # Examples
 ```rust

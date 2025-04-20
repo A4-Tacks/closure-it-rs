@@ -1,12 +1,12 @@
 [package]
 name = "closure-it"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 
 authors = ["A4-Tacks <wdsjxhno1001@163.com>"]
 keywords = ["closure", "it", "lambda", "proc-macro", "macros"]
 categories = ["no-std", "no-std::no-alloc"]
-description = "Like kotlin it keyword, translate `it` in group to closure"
+description = "Like kotlin it keyword, translate `it` to closure"
 
 license = "MIT"
 repository = "https://github.com/A4-Tacks/closure-it-rs"
