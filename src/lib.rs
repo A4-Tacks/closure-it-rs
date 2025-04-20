@@ -110,6 +110,21 @@ impl Closure<'_> {
     }
 }
 
+fn get_catch_it<F>(attr: TokenStream, f: F) -> TokenStream
+where F: FnOnce(&str) -> TokenStream,
+{
+    let iter = &mut attr.into_iter();
+    let catch_it = match iter.next() {
+        Some(TokenTree::Ident(ident)) => &*ident.to_string(),
+        Some(attr) => return err("invalid input", attr.span()),
+        _ => "it",
+    };
+    if let Some(extra) = iter.next() {
+        return err("invalid input", extra.span());
+    }
+    f(catch_it)
+}
+
 /// Replace `it` to closure body, expand the closure after `,` `;` `=>` and `(`
 ///
 /// # Examples
@@ -132,11 +147,8 @@ impl Closure<'_> {
 /// ```
 #[proc_macro_attribute]
 pub fn closure_it(attr: TokenStream, item: TokenStream) -> TokenStream {
-    let catch_it = match attr.into_iter().next() {
-        Some(TokenTree::Ident(ident)) => &*ident.to_string(),
-        Some(attr) => return err("invalid input", attr.span()),
-        _ => "it",
-    };
-    Closure { catch_it, ..Default::default() }
-        .ext_proc_it(item)
+    get_catch_it(attr, |catch_it| {
+        Closure { catch_it, ..Default::default() }
+            .ext_proc_it(item)
+    })
 }
