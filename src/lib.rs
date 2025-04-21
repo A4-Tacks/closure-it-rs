@@ -65,20 +65,21 @@ impl Closure<'_> {
         let mut result = TokenStream::new();
 
         while let Some(tt) = iter.next() {
+            let s = span_setter(tt.span());
             match tt {
                 TokenTree::Group(group)
                     if group.delimiter() == Delimiter::Parenthesis =>
                 {
                     let grouped = self.ext_proc_it(group.stream());
                     result.extend([
-                        Group::new(group.delimiter(), grouped).into(),
-                    ] as [TokenTree; 1]);
+                        s(Group::new(group.delimiter(), grouped).into()),
+                    ]);
                 },
                 TokenTree::Group(group) => {
                     let grouped = self.proc_it(group.stream());
                     result.extend([
-                        Group::new(group.delimiter(), grouped).into(),
-                    ] as [TokenTree; 1]);
+                        s(Group::new(group.delimiter(), grouped).into()),
+                    ]);
                 },
                 TokenTree::Ident(ref ident)
                     if ident.to_string() == self.catch_it =>

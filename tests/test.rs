@@ -8,6 +8,7 @@ where T: PartialEq<U>,
 }
 
 #[test]
+#[allow(unused_parens, unused_braces)]
 #[closure_it::closure_it]
 fn test() {
     assert_eq((0..3).map(it+1).collect::<Vec<_>>(), [1, 2, 3]);
