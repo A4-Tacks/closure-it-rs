@@ -125,7 +125,8 @@ where F: FnOnce(&str) -> TokenStream,
     f(catch_it)
 }
 
-/// Replace `it` to closure body, expand the closure after `,` `;` `=>` and `(`
+/// Replace `it` to closure body,
+/// expand the closure parameter after `,` `;` `=>` and `(`
 ///
 /// # Examples
 /// ```
