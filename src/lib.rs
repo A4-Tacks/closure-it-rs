@@ -6,6 +6,13 @@ use proc_macro::{
     TokenTree,
 };
 
+fn span_setter(span: Span) -> impl Fn(TokenTree) -> TokenTree {
+    move |mut tt| {
+        tt.set_span(span);
+        tt
+    }
+}
+
 #[must_use]
 fn stream<I>(iter: I) -> TokenStream
 where I: IntoIterator<Item = TokenTree>,
@@ -14,10 +21,7 @@ where I: IntoIterator<Item = TokenTree>,
 }
 
 fn err(msg: &str, span: Span) -> TokenStream {
-    let s = |mut t: TokenTree| {
-        t.set_span(span);
-        t
-    };
+    let s = span_setter(span);
     stream([
         s(Punct::new(':', Joint).into()),
         s(Punct::new(':', Joint).into()),
@@ -42,10 +46,11 @@ impl Closure<'_> {
         let Some(it) = self.it.take() else {
             return TokenStream::new();
         };
+        let s = span_setter(it.span());
         stream([
-            Punct::new('|', Joint).into(),
+            s(Punct::new('|', Joint).into()),
             it,
-            Punct::new('|', Joint).into(),
+            s(Punct::new('|', Joint).into()),
         ])
     }
 
