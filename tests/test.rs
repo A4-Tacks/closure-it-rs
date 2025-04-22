@@ -12,13 +12,14 @@ where T: PartialEq<U>,
 #[closure_it::closure_it]
 fn test() {
     assert_eq((0..3).map(it+1).collect::<Vec<_>>(), [1, 2, 3]);
+    assert_eq([1, 0].map([8, 6][it]), [6, 8]);
     assert_eq((-3i32..0).map(it.abs()).collect::<Vec<_>>(), [3, 2, 1]);
     assert_eq((1+{it})(2), 3);
     assert_eq((1+[it][0])(2), 3);
     assert_eq(([it])(0), [0]);
     assert_eq((it)(0), 0);
     assert_eq(Some(2).map_or(3, it*2), 4);
-    assert_eq(Some(2).map_or(3, it*2), 4);
+    assert_eq(Some(2).map_or(3, {it}*2), 4);
     assert_eq(Some(2).map_or(3, (it*2)), 4);
     assert_eq(Some(2).map_or(3, ((it*2))), 4);
     assert_eq(Some(2).map_or(3, {(it*2)}), 4);
